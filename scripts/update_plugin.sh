@@ -20,9 +20,14 @@ shift
 pull_changes() {
 	local plugin="$1"
 	local plugin_path="$(plugin_path_helper "$plugin")"
+
+  local current_sha=`git rev-parse HEAD`
+
 	cd "$plugin_path" &&
 		GIT_TERMINAL_PROMPT=0 git pull &&
-		GIT_TERMINAL_PROMPT=0 git submodule update --init --recursive
+		GIT_TERMINAL_PROMPT=0 git submodule update --init --recursive &&
+		echo "" &&
+		GIT_TERMINAL_PROMPT=0 git log --stat --oneline --no-merges "$current_sha"..HEAD
 }
 
 print_update_status() {
